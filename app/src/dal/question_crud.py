@@ -64,12 +64,11 @@ class QuestionCRUD:
     @staticmethod
     def get_questions_by_type_difficulty_category_and_amount(question_type: QuestionType, question_category: Category,
                                                              question_difficulty: DifficultyLevel, amount: int):
-        print(amount)
-
         pipeline = [
             {"$match": {"type": question_type.value,
                         "difficulty": question_difficulty.value,
-                        "category": question_category.value}},  # Convert enum to string
+                        "category": question_category.value,
+                        "is_approved": True}},
             {"$sample": {"size": amount}}
         ]
 
