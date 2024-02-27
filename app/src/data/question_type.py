@@ -17,4 +17,4 @@ class QuestionType(Enum):
                 return question_type
 
         # If no match is found, return None
-        return cls.MULTI_CHOICE  # Multiple Choice question is the default type
+        return None

@@ -1,4 +1,5 @@
 from enum import Enum
+from src.validator import Validator
 
 
 class Category(Enum):
@@ -10,10 +11,12 @@ class Category(Enum):
     MOVIES = 'Movies'
     MUSIC = 'Music'
     GENERAL_KNOWLEDGE = 'General Knowledge'
-    RANDOM = 'Random'
 
     @classmethod
     def from_string(cls, category_str):
+        Validator.validate_category(category=category_str)
+        if not category_str:
+            return None
         # Convert input string to lowercase for case-insensitive comparison
         category_str_lower = category_str.lower()
 
@@ -23,5 +26,5 @@ class Category(Enum):
             if category.value.lower() == category_str_lower:
                 return category
 
-        # If no match is found, return Random as default
-        return cls.RANDOM  # random as a default category
+        # If no match is found, return None as default
+        return None

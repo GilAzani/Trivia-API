@@ -3,23 +3,30 @@ from src.data.question_entity import QuestionEntity
 from src.data.category import Category
 from src.data.difficulty_level import DifficultyLevel
 from src.data.question_type import QuestionType
+from src.exceptions.question_not_exists_exception import QuestionNotExistsException
 
 
 class QuestionCRUD:
     @staticmethod
-    def create_question(question_entity: str, correct: int, answers: list[str], question_type: QuestionType,
+    def create_question(question: str, correct: int, answers: list[str], question_type: QuestionType,
                         category: Category, difficulty: DifficultyLevel):
         object_id = str(uuid4())  # Generate a UUID for object_id
         question_entity = QuestionEntity(
             object_id=object_id,
             category=category,
-            question=question_entity,
+            question=question,
             correct=correct,
             answers=answers,
             type=question_type,
             difficulty=difficulty,
             is_approved=False  # default value is flase, admin needs to approve the question
         )
+        question_entity.save()
+        return question.to_dict()
+
+    @staticmethod
+    def create_question_using_entity(question_entity: QuestionEntity):
+        question_entity.object_id = str(uuid4())  # Assign the generated UUID to object_id
         question_entity.save()
         return question_entity.to_dict()
 
@@ -41,8 +48,11 @@ class QuestionCRUD:
     #     return question_entity.to_dict()
 
     @staticmethod
-    def get_question_by_id(object_id):
-        return QuestionEntity.objects(object_id=object_id).first()
+    def get_question_by_id(object_id: str):
+        question = QuestionEntity.objects(object_id=object_id).first()
+        if question:
+            return question.to_dict()
+        raise QuestionNotExistsException(object_id)
 
     @staticmethod
     def update_question(object_id, **kwargs):

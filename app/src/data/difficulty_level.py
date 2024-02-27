@@ -18,4 +18,4 @@ class DifficultyLevel(Enum):
                 return difficulty
 
         # If no match is found, return None
-        return cls.EASY  # easy is the default level
+        return None
