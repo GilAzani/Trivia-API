@@ -1,4 +1,4 @@
-from src.data.question_entity import QuestionEntity
+from ..data.question_entity import QuestionEntity
 
 
 class QuestionBoundary:

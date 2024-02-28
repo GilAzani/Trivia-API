@@ -1,5 +1,4 @@
 from enum import Enum
-from src.validator import Validator
 
 
 class Category(Enum):
@@ -14,7 +13,6 @@ class Category(Enum):
 
     @classmethod
     def from_string(cls, category_str):
-        Validator.validate_category(category=category_str)
         if not category_str:
             return None
         # Convert input string to lowercase for case-insensitive comparison

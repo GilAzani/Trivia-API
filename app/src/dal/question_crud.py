@@ -1,9 +1,9 @@
 from uuid import uuid4
-from src.data.question_entity import QuestionEntity
-from src.data.category import Category
-from src.data.difficulty_level import DifficultyLevel
-from src.data.question_type import QuestionType
-from src.exceptions.question_not_exists_exception import QuestionNotExistsException
+from ..data.question_entity import QuestionEntity
+from ..data.category import Category
+from ..data.difficulty_level import DifficultyLevel
+from ..data.question_type import QuestionType
+from ..exceptions.question_not_exists_exception import QuestionNotExistsException
 
 
 class QuestionCRUD:
@@ -68,17 +68,22 @@ class QuestionCRUD:
         question = QuestionEntity.objects(object_id=object_id).first()
         if question:
             question.delete()
-            return True
-        return False
+        raise QuestionNotExistsException(object_id)
 
     @staticmethod
     def get_questions_by_type_difficulty_category_and_amount(question_type: QuestionType, question_category: Category,
                                                              question_difficulty: DifficultyLevel, amount: int):
+        settings = {
+                "type": question_type.value if question_type else None,
+                "difficulty": question_difficulty.value if question_difficulty else None,
+                "category": question_category.value if question_category else None,
+                "is_approved": True
+            }
+
+        filtered_settings = {key: value for key, value in settings.items() if value is not None}
+
         pipeline = [
-            {"$match": {"type": question_type.value,
-                        "difficulty": question_difficulty.value,
-                        "category": question_category.value,
-                        "is_approved": True}},
+            {"$match": filtered_settings},
             {"$sample": {"size": amount}}
         ]
 

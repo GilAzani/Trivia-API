@@ -1,7 +1,7 @@
 from mongoengine import Document, StringField, IntField, ListField, BooleanField, EnumField
-from src.data.category import Category
-from src.data.difficulty_level import DifficultyLevel
-from src.data.question_type import QuestionType
+from ..data.category import Category
+from ..data.difficulty_level import DifficultyLevel
+from ..data.question_type import QuestionType
 
 
 class QuestionEntity(Document):
