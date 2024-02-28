@@ -22,13 +22,13 @@ class QuestionCRUD:
             is_approved=False  # default value is flase, admin needs to approve the question
         )
         question_entity.save()
-        return question.to_dict()
+        return {"object_id": question_entity.object_id}
 
     @staticmethod
     def create_question_using_entity(question_entity: QuestionEntity):
         question_entity.object_id = str(uuid4())  # Assign the generated UUID to object_id
         question_entity.save()
-        return question_entity.to_dict()
+        return {"object_id": question_entity.object_id}
 
     # @staticmethod
     # def create_question(question_entity: str, correct: int, answers: list[str], question_type: QuestionType,
@@ -50,7 +50,7 @@ class QuestionCRUD:
     @staticmethod
     def get_question_by_id(object_id: str):
         question = QuestionEntity.objects(object_id=object_id).first()
-        if question:
+        if question and question.is_approved is not False:
             return question.to_dict()
         raise QuestionNotExistsException(object_id)
 
@@ -61,13 +61,15 @@ class QuestionCRUD:
             for key, value in kwargs.items():
                 setattr(question, key, value)
             question.save()
-        return question
+            return
+        raise QuestionNotExistsException(object_id)
 
     @staticmethod
     def delete_question(object_id):
         question = QuestionEntity.objects(object_id=object_id).first()
         if question:
             question.delete()
+            return
         raise QuestionNotExistsException(object_id)
 
     @staticmethod

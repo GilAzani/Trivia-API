@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+import warnings
 from ..services.questions_service import QuestionsService
 from ..exceptions.question_not_exists_exception import QuestionNotExistsException
 from ..exceptions.data_not_valid_exception import DataNotValidException
@@ -18,6 +19,7 @@ class QuestionsRoute:
         self.blueprint.route('/questions', methods=['POST'])(self.suggest_question)
         self.blueprint.route('/questions/<question_id>', methods=['GET'])(self.get_question_by_id)
         self.blueprint.route('/questions/<question_id>', methods=['DELETE'])(self.delete_question_by_id)
+        self.blueprint.route('/questions/<question_id>/approve', methods=['PUT'])(self.approve_question_by_id)
 
     def get_questions(self):
         try:
@@ -36,8 +38,8 @@ class QuestionsRoute:
             return jsonify({'error': str(e)}), Constants.BAD_REQUEST_ERROR_CODE
         except DataNotValidException as e:
             return jsonify({'error': str(e)}), Constants.BAD_REQUEST_ERROR_CODE
-        except Exception as e:
-            return jsonify({'error': str(e)}), Constants.INTERNAL_ERROR
+        # except Exception as e:
+        #     return jsonify({'error': str(e)}), Constants.INTERNAL_ERROR
 
     def suggest_question(self):
         try:
@@ -51,6 +53,15 @@ class QuestionsRoute:
     def get_question_by_id(self, question_id):
         try:
             return jsonify(self.questions_service.get_question_by_id(question_id)), Constants.SUCCESS_CODE
+        except QuestionNotExistsException as e:
+            return jsonify({'error': str(e)}), Constants.NOT_EXISTS_ERROR_CODE
+        except Exception as e:
+            return jsonify({'error': str(e)}), Constants.INTERNAL_ERROR
+
+    def approve_question_by_id(self, question_id):
+        warnings.warn("This method is deprecated. Use direct approval on the DB instead.", DeprecationWarning)
+        try:
+            return jsonify(self.questions_service.approve_question_by_id(question_id)), Constants.SUCCESS_CODE
         except QuestionNotExistsException as e:
             return jsonify({'error': str(e)}), Constants.NOT_EXISTS_ERROR_CODE
         except Exception as e:

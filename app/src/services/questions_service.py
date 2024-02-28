@@ -4,6 +4,7 @@ from ..data.question_type import QuestionType
 from ..dal.question_crud import QuestionCRUD
 from ..data.question_boundary import QuestionBoundary
 from ..validator import Validator
+import warnings
 
 
 class QuestionsService:
@@ -28,3 +29,7 @@ class QuestionsService:
 
     def delete_question_by_id(self, question_id: str):
         return QuestionCRUD.delete_question(object_id=question_id)
+
+    def approve_question_by_id(self, question_id: str):
+        warnings.warn("This method is deprecated. Use direct approval on the DB instead.", DeprecationWarning)
+        return QuestionCRUD.update_question(object_id=question_id, **{'is_approved': True})
