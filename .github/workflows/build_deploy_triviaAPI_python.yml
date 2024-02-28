@@ -1,9 +1,7 @@
-name: Deploy location-local-python-package including OpenCage get Country name dvlp1
+name: Deploy trivia-api
 on:
   push:
-    branches: [ dev ]
-  #pull_request:
-    #branches: [ main ] 
+ 
 permissions:
   contents: read
 env:
