@@ -1,0 +1,54 @@
+name: Deploy location-local-python-package including OpenCage get Country name dvlp1
+on:
+  push:
+    branches: [ dev ]
+  #pull_request:
+    #branches: [ main ] 
+permissions:
+  contents: read
+env:
+      ATLAS_URI: mongodb+srv://gila:xyILYTtXqAHkoKhk@trivia.q3iew47.mongodb.net/?retryWrites=true&w=majority&appName=Trivia
+      DB_NAME: Trivia
+
+      TEST_DB_NAME: trivia_test
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dvlp1
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        cd ./$repo_name
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Build package
+      run: |
+        pip install build
+        python -m build
+
+    # poetry: command not found
+    #- name: Increase the version number
+      #run: poetry version patch
+
+    - name: Run Tests
+      run: |
+        cd ./$repo_name
+        # pytest
+        pip install pytest-cov
+        (pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=$package_directory $package_directory/tests/ | tee pytest-coverage.txt; test ${PIPESTATUS[0]} -eq 0)
+      #run: python -m unittest discover -s tests -p 'test_*.py'
+      env:
+        ATLAS_URI: ${{ env.ATLAS_URI }} 
+        DB_NAME: ${{ env.DB_NAME }} 
+
+        TEST_DB_NAME: ${{ env.TEST_DB_NAME }} 
+
