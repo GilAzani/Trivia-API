@@ -10,6 +10,9 @@ env:
 
       TEST_DB_NAME: trivia_test
 
+      package_directory: app
+
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
