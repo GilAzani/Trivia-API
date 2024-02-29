@@ -85,8 +85,6 @@ class Validator:
 
     @staticmethod
     def validate_amount_requested(amount: int):
-        print("amount___")
-        print(amount)
         if amount <= 0 or not isinstance(amount, int):
             raise DataNotValidException("amount")
 

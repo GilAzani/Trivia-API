@@ -26,7 +26,7 @@ class QuestionsRoute:
             # Get the category query parameter if provided, otherwise set it to None
             category = request.args.get('category', "")
             # Get the amount query parameter (required)
-            amount = int(request.args.get('amount'))
+            amount = int(request.args.get('amount', 1))
 
             difficulty = request.args.get('difficulty', "")
 
@@ -38,8 +38,10 @@ class QuestionsRoute:
             return jsonify({'error': str(e)}), Constants.BAD_REQUEST_ERROR_CODE
         except DataNotValidException as e:
             return jsonify({'error': str(e)}), Constants.BAD_REQUEST_ERROR_CODE
-        # except Exception as e:
-        #     return jsonify({'error': str(e)}), Constants.INTERNAL_ERROR
+        except QuestionNotExistsException as e:
+            return jsonify({'error': str(e)}), Constants.NOT_EXISTS_ERROR_CODE
+        except Exception as e:
+            return jsonify({'error': str(e)}), Constants.INTERNAL_ERROR
 
     def suggest_question(self):
         try:

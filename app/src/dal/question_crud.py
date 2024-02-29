@@ -95,4 +95,7 @@ class QuestionCRUD:
         # Convert the cursor to a list of dictionaries
         random_questions = list(cursor)
 
+        if len(random_questions) == 0:
+            raise QuestionNotExistsException(f"couldn't find questions with this settings:{filtered_settings}")
+
         return random_questions
