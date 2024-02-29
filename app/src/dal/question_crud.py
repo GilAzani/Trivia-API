@@ -4,6 +4,7 @@ from ..data.category import Category
 from ..data.difficulty_level import DifficultyLevel
 from ..data.question_type import QuestionType
 from ..exceptions.question_not_exists_exception import QuestionNotExistsException
+from ..exceptions.question_setting_not_exists_exception import QuestionSettingNotExistsException
 
 
 class QuestionCRUD:
@@ -96,6 +97,6 @@ class QuestionCRUD:
         random_questions = list(cursor)
 
         if len(random_questions) == 0:
-            raise QuestionNotExistsException(filtered_settings)
+            raise QuestionSettingNotExistsException(filtered_settings)
 
         return random_questions

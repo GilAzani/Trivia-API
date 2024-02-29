@@ -3,6 +3,7 @@ import warnings
 from ..services.questions_service import QuestionsService
 from ..exceptions.question_not_exists_exception import QuestionNotExistsException
 from ..exceptions.data_not_valid_exception import DataNotValidException
+from ..exceptions.question_setting_not_exists_exception import QuestionSettingNotExistsException
 from ..constants import Constants
 
 
@@ -38,7 +39,7 @@ class QuestionsRoute:
             return jsonify({'error': str(e)}), Constants.BAD_REQUEST_ERROR_CODE
         except DataNotValidException as e:
             return jsonify({'error': str(e)}), Constants.BAD_REQUEST_ERROR_CODE
-        except QuestionNotExistsException as e:
+        except QuestionSettingNotExistsException as e:
             return jsonify({'error': str(e)}), Constants.NOT_EXISTS_ERROR_CODE
         except Exception as e:
             return jsonify({'error': str(e)}), Constants.INTERNAL_ERROR
