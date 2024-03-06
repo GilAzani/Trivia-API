@@ -47,7 +47,7 @@ By default, the server will run on `http://localhost:5000`.
 
 The Trivia API exposes the following endpoints:
 
-- `GET /questions`: Retrieve trivia questions based on specified parameters such as category, difficulty, and amount.
+- `GET /questions`: Retrieve trivia questions based on specified parameters such as category, difficulty, type and amount.
 
 - `POST /questions`: Suggest a new trivia question by providing JSON data in the request body.
 
