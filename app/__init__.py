@@ -16,6 +16,6 @@ app.register_blueprint(questions_route.as_blueprint())
 if __name__ == '__main__':
     try:
         question_db_connector.connect_to_db()   # Connect to MongoDB
-        app.run()
+        app.run(host='0.0.0.0')
     finally:
         question_db_connector.disconnect_from_db()  # Disconnect from MongoDB

@@ -1,4 +1,7 @@
 from ..data.question_entity import QuestionEntity
+from ..data.category import Category
+from ..data.question_type import QuestionType
+from ..data.difficulty_level import DifficultyLevel
 
 
 class QuestionBoundary:
@@ -24,12 +27,12 @@ class QuestionBoundary:
     def to_entity(self) -> QuestionEntity:
         return QuestionEntity(
             object_id=self.object_id,
-            category=self.category,
+            category=Category.from_string(self.category),
             question=self.question,
             correct=self.correct,
             answers=self.answers,
-            type=self.type,
-            difficulty=self.difficulty,
+            type=QuestionType.from_string(self.type),
+            difficulty=DifficultyLevel.from_string(self.difficulty),
             is_approved=False  # as default a question is not approved
         )
 
